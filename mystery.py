@@ -2,7 +2,6 @@ import csv
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-# 1. Добавляем "Умные ожидания" (Wait)
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -11,17 +10,13 @@ writer = csv.writer(file)
 writer.writerow(['Название', 'Цена', 'Описание'])
 
 options = Options()
-# Вставляем библиотеку random User-Agent (если установил), или оставляем твою строку
 options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36")
 options.add_argument("--window-size=1920,1080")
 options.add_argument("--disable-blink-features=AutomationControlled")
-options.add_argument("--headless")  # Если не нужен браузер на экране
-
+options.add_argument("--headless")  
 driver = webdriver.Chrome(options=options)
 driver.get("http://books.toscrape.com/catalogue/category/books/mystery_3/index.html")
 
-# 2. Ждем, пока прогрузятся ссылки (максимум 10 сек)
-# Вместо time.sleep()
 try:
     WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, "//h3/a"))
@@ -43,7 +38,6 @@ for link in all_urls:
     driver.get(link)
     
     try:
-        # 3. Внутри карточки тоже ждем, пока появится заголовок
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "//h1"))
         )
